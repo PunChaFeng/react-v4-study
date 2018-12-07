@@ -1,5 +1,7 @@
 import "./style.css";
 import React from "react";
+import { Route } from "react-router";
+import Details from "./Details";
 import { Pet } from "./Pet";
 import pf from "petfinder-client";
 
@@ -36,21 +38,29 @@ export default class Results extends React.Component {
   render() {
     return (
       <>
+        <Route path="/pets/:petId" component={Details} />
         <div>
-          {this.state.pets.map(pet => {
-            let breed = pet.breeds.breed || "N/A";
-            if (Array.isArray(breed)) breed = pet.breeds.breed.join(",");
-            return (
-              <Pet
-                key={pet.id}
-                animal={pet.animal}
-                name={pet.name}
-                breed={breed}
-                media={pet.media}
-                location={`${pet.contact.city}, ${pet.contact.state}`}
-              />
-            );
-          })}
+          <Route
+            exact
+            path={this.props.match.url}
+            render={() => {
+              return this.state.pets.map(pet => {
+                let breed = pet.breeds.breed || "N/A";
+                if (Array.isArray(breed)) breed = pet.breeds.breed.join(",");
+                return (
+                  <Pet
+                    key={pet.id}
+                    animal={pet.animal}
+                    name={pet.name}
+                    breed={breed}
+                    media={pet.media}
+                    location={`${pet.contact.city}, ${pet.contact.state}`}
+                    id={pet.id}
+                  />
+                );
+              });
+            }}
+          />
         </div>
       </>
     );
