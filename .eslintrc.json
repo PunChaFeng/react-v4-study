@@ -17,7 +17,7 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": ["babel","react", "import", "jsx-a11y"],
   "env": {
     "es6": true,
     "browser": true,

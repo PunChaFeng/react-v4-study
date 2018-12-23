@@ -4,6 +4,7 @@ import { Route } from "react-router";
 import Details from "./Details";
 import { Pet } from "./Pet";
 import pf from "petfinder-client";
+import {SearchBox} from "./SearchBox";
 
 const petfinder = pf({
   key: "399c00db48112a3e614605a5172ee524",
@@ -44,21 +45,25 @@ export default class Results extends React.Component {
             exact
             path={this.props.match.url}
             render={() => {
-              return this.state.pets.map(pet => {
-                let breed = pet.breeds.breed || "N/A";
-                if (Array.isArray(breed)) breed = pet.breeds.breed.join(",");
-                return (
-                  <Pet
-                    key={pet.id}
-                    animal={pet.animal}
-                    name={pet.name}
-                    breed={breed}
-                    media={pet.media}
-                    location={`${pet.contact.city}, ${pet.contact.state}`}
-                    id={pet.id}
-                  />
-                );
-              });
+              return (<div>
+                {()=>
+                  this.state.pets.map(pet => {
+                    let breed = pet.breeds.breed || "N/A";
+                    if (Array.isArray(breed)) breed = pet.breeds.breed.join(",");
+                    return (
+                      <Pet
+                        key={pet.id}
+                        animal={pet.animal}
+                        name={pet.name}
+                        breed={breed}
+                        media={pet.media}
+                        location={`${pet.contact.city}, ${pet.contact.state}`}
+                        id={pet.id}
+                      />
+                    );
+                  })
+                }
+              </div>);
             }}
           />
         </div>
