@@ -3,47 +3,55 @@ import { ANIMALS } from "petfinder-client";
 import { Consumer } from "./SearchContext";
 
 export class SearchBox extends React.Component {
+
+  handleFormSubmit = (event)=>{
+    event.preventDefault();
+    this.props.search();
+  }
   render() {
     return (
       <Consumer>
         {context => (
           <div className="search-params">
-            <label htmlFor="location">Location:</label>
-            <input
-              id="location"
-              value={context.location}
-              placeholder="Location..."
-              onChange={context.handleLocationChange}
-            />
-            <label htmlFor="animal">Animal</label>
-            <select
-              id="animal"
-              value={context.animal}
-              onChange={context.handleAnimalChange}
-              onBlur={context.handleAnimalChange}
-            >
-              <option />
-              {ANIMALS.map(animal => (
-                <option key={animal} value={animal}>
-                  {animal}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="breed">Breed</label>
-            <select
-              id="breed"
-              value={context.breed}
-              onChange={context.handleBreedChange}
-              onBlur={context.handleBreedChange}
-              disabled={!context.breeds.length}
-            >
-              <option />
-              {context.breeds.map(breed => (
-                <option key={breed} value={breed}>
-                  {breed}
-                </option>
-              ))}
-            </select>
+            <form onSubmit={this.handleFormSubmit}>
+              <label htmlFor="location">Location:</label>
+              <input
+                id="location"
+                value={context.location}
+                placeholder="Location..."
+                onChange={context.handleLocationChange}
+              />
+              <label htmlFor="animal">Animal</label>
+              <select
+                id="animal"
+                value={context.animal}
+                onChange={context.handleAnimalChange}
+                onBlur={context.handleAnimalChange}
+              >
+                <option />
+                {ANIMALS.map(animal => (
+                  <option key={animal} value={animal}>
+                    {animal}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="breed">Breed</label>
+              <select
+                id="breed"
+                value={context.breed}
+                onChange={context.handleBreedChange}
+                onBlur={context.handleBreedChange}
+                disabled={!context.breeds.length}
+              >
+                <option />
+                {context.breeds.map(breed => (
+                  <option key={breed} value={breed}>
+                    {breed}
+                  </option>
+                ))}
+              </select>
+              <button type="submit">Submit</button>
+            </form>
           </div>
         )}
       </Consumer>

@@ -4,22 +4,32 @@ import { Route } from "react-router";
 import Details from "./Details";
 import { Pet } from "./Pet";
 import pf from "petfinder-client";
-import {SearchBox} from "./SearchBox";
+import { SearchBox } from "./SearchBox";
+import { Consumer } from "./SearchContext";
 
 const petfinder = pf({
   key: "399c00db48112a3e614605a5172ee524",
   secret: "6a33d390cffccd2126c1850231b28eb4"
 });
 
-export default class Results extends React.Component {
+class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = { pets: [] };
   }
 
   componentDidMount() {
+    this.search();
+  }
+
+  search = () => {
     petfinder.pet
-      .find({ output: "full", location: "Seattle, WA" })
+      .find({
+        output: "full",
+        location: this.props.searchParams.location,
+        animal: this.props.searchParams.animal,
+        breed: this.props.searchParams.breed
+      })
       .then(data => {
         let pets;
         if (data.petfinder.pets && data.petfinder.pets.pet) {
@@ -34,7 +44,7 @@ export default class Results extends React.Component {
 
         this.setState({ pets });
       });
-  }
+  };
 
   render() {
     return (
@@ -45,11 +55,13 @@ export default class Results extends React.Component {
             exact
             path={this.props.match.url}
             render={() => {
-              return (<div>
-                {()=>
-                  this.state.pets.map(pet => {
+              return (
+                <div>
+                  <SearchBox search={this.search}/>
+                  {this.state.pets.map(pet => {
                     let breed = pet.breeds.breed || "N/A";
-                    if (Array.isArray(breed)) breed = pet.breeds.breed.join(",");
+                    if (Array.isArray(breed))
+                      breed = pet.breeds.breed.join(",");
                     return (
                       <Pet
                         key={pet.id}
@@ -61,13 +73,21 @@ export default class Results extends React.Component {
                         id={pet.id}
                       />
                     );
-                  })
-                }
-              </div>);
+                  })}
+                </div>
+              );
             }}
           />
         </div>
       </>
     );
   }
+}
+
+export default function ResultsWithContext(props) {
+  return (
+    <Consumer>
+      {context => <Results {...props} searchParams={context} />}
+    </Consumer>
+  );
 }

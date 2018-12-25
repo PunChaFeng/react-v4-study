@@ -9,6 +9,10 @@ export class Pet extends React.Component {
     if (media && media.photos && media.photos.photo) {
       photos = media.photos.photo.filter(photo => photo["@size"] === "pn");
     }
+    if (!photos || photos.length === 0) {
+      photos = [{value: "http://placecorgi.com/300/300"}];
+    }
+
     return (
       <Link className="pet" to={`pets/${id}`}>
         <div className="image-container">

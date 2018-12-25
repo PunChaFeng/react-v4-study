@@ -69,7 +69,9 @@ class App extends React.Component {
               <nav>
                 <Link to="/">Home</Link>
                 <br />
-                <Link to="/search-params">Search</Link>
+                <Link to="/search-params">
+                  <span>🔎</span>
+                </Link>
                 <br />
                 <Link to="/pets">Pets</Link>
                 <br />
